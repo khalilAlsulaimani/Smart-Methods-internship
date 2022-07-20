@@ -1,3 +1,12 @@
+if ("serial" in navigator) {
+    // Prompt user to select any serial port.
+  const port = await navigator.serial.requestPort();
+
+    // Wait for the serial port to open.
+  await port.open({ baudRate: 9600 });
+}
+
+
 const texts = document.querySelector('.texts');
 
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -8,8 +17,6 @@ recognition.interimResults = true;
 
 let p = document.createElement('p');
 
-
-
 recognition.addEventListener('result', (e)=>{
   texts.appendChild(p);
   const text = Array.from(e.results)
@@ -19,57 +26,38 @@ recognition.addEventListener('result', (e)=>{
 
   p.innerText = text;
   if(e.results[0].isFinal){
-    if (text.includes('السلام عليكم')) {
-        p = document.createElement('p');
-        p.classList.add('replay');
-        p.innerText = 'و عليكم السلالم';
-        texts.appendChild(p)
-      }
-    if (text.includes('كيف حالك')) {
+    if (text.includes('لف يمين')) {
       p = document.createElement('p');
       p.classList.add('replay');
-      p.innerText = 'الحمد الله كيف !!كيف حالك انت ؟';
+      p.innerText = 'يمين';
       texts.appendChild(p)
-    }
-    if (text.includes("ايش اسمك") ) {
-      p = document.createElement('p');
-      p.classList.add('replay');
-      p.innerText = 'اسمي مساعد';
-      texts.appendChild(p)
-    }
-    if (text.includes('شغل اليوتيوب')) {
-      p = document.createElement('p');
-      p.classList.add('replay');
-      p.innerText = 'opening youtube channel';
-      texts.appendChild(p)
-      console.log('opening youtube')
-      window.open('https://www.youtube.com/')
-    }
-    if(text.includes("فين تشتغل")){
-      p = document.createElement('p');
-      p.classList.add('replay');
-      p.innterText ='في الاساليب الذكية';
-      texts.appendChild(p)
-      console.log('opening work site')
-      window.open('https://s-m.com.sa/smtc/sdb/student-dashboard.php')
+      const writer = port.writable.getWriter();
 
+      const data = new Uint8Array(["right"]);
+      await writer.write(data);
+      // Allow the serial port to be closed later.
+      writer.releaseLock();
     }
-    if(text.includes("مين صاحبك")){
-        p = document.createElement('p');
-        p.classList.add('replay');
-        p.innterText =" الموبرمج الاسطوري خليل";
-        texts.appendChild(p)
-        console.log('opening khalils github ')
-        window.open('https://github.com/khalilAlsulaimani')
-
+    if (text.includes('لف يسار')) {
+      p = document.createElement('p');
+      p.classList.add('replay');
+      p.innerText = 'يسار';
+      texts.appendChild(p)
+      const data = new Uint8Array(["left"]); 
+      await writer.write(data);
+      // Allow the serial port to be closed later.
+      writer.releaseLock();
     }
+   
     p = document.createElement('p');
   }
 });
-
-
 recognition.addEventListener('end', ()=>{
   recognition.start();
 })
 
 recognition.start();
+
+
+
+
