@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+   <head>
+    <title>Comminiaction between ardino and website </title>
+    <script src='https://ajax.googleapis.com/ajax/libs/socket.io/2.0.4/socket.io.js'></script>
+   </head>
+
+   <body>
+    <h1>Comminiaction between get page and arduino</h1>
+    <div id="sample">
+        <script>
+            var socket =io();
+            socket.on('data',function(data){
+                console.log(data);
+                documant.getElementsById('sample').innerHTML = data;
+            });
+
+        </script>
+    </div>
+   </body>
+</html>
